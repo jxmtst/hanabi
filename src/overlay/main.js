@@ -17,8 +17,20 @@ let win;
 let tray;
 let enabled = true;
 
+function pickDisplay() {
+  const displays = screen.getAllDisplays();
+  const target = displays[config.displayIndex];
+  if (!target) {
+    console.warn(
+      `[overlay] DISPLAY_INDEX=${config.displayIndex} は無効（接続数 ${displays.length}）。主ディスプレイを使用`,
+    );
+    return screen.getPrimaryDisplay();
+  }
+  return target;
+}
+
 function createWindow() {
-  const { bounds } = screen.getPrimaryDisplay();
+  const { bounds } = pickDisplay();
   win = new BrowserWindow({
     x: bounds.x,
     y: bounds.y,
