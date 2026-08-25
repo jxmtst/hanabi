@@ -1,0 +1,28 @@
+import 'dotenv/config';
+
+function bool(value, fallback) {
+  if (value === undefined) return fallback;
+  return value === 'true' || value === '1';
+}
+
+function num(value, fallback) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+export const config = {
+  botToken: process.env.DISCORD_BOT_TOKEN ?? '',
+  channelId: process.env.CHANNEL_ID ?? '',
+  wsPort: num(process.env.WS_PORT, 8787),
+  showAuthor: bool(process.env.SHOW_AUTHOR, true),
+  showAvatar: bool(process.env.SHOW_AVATAR, false),
+  fontSize: num(process.env.FONT_SIZE, 28),
+  danmakuSpeed: num(process.env.DANMAKU_SPEED, 140),
+  maxConcurrent: num(process.env.MAX_CONCURRENT, 40),
+};
+
+// 受信部でのみ必須の値を検証する（表示部では呼ばない）
+export function assertReceiverConfig() {
+  if (!config.botToken) throw new Error('DISCORD_BOT_TOKEN が未設定です (.env を確認)');
+  if (!config.channelId) throw new Error('CHANNEL_ID が未設定です (.env を確認)');
+}
