@@ -1,0 +1,22 @@
+{
+  "name": "hanabi",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Discord のメッセージをニコニコ風の弾幕として macOS 画面に表示する",
+  "main": "src/overlay/main.js",
+  "scripts": {
+    "test": "node --test",
+    "receiver": "node src/receiver/index.js",
+    "overlay": "electron .",
+    "start": "echo 'Run \"npm run receiver\" and \"npm run overlay\" in separate terminals'"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.0",
+    "dotenv": "^16.4.0",
+    "ws": "^8.17.0"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0"
+  }
+}
