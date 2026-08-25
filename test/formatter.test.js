@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { formatText } from '../src/receiver/formatter.js';
+import { formatText, parseSegments } from '../src/receiver/formatter.js';
 
 test('formatText: パス付き URL はホスト+省略記号に短縮する', () => {
   assert.equal(
@@ -15,4 +15,24 @@ test('formatText: パスなし URL はホストのみにする', () => {
 
 test('formatText: URL を含まない文字列はそのまま返す', () => {
   assert.equal(formatText('やっほー'), 'やっほー');
+});
+
+test('parseSegments: テキストとカスタム絵文字を分割する', () => {
+  assert.deepEqual(parseSegments('やっほー <:wave:123>'), [
+    { type: 'text', value: 'やっほー ' },
+    { type: 'emoji', url: 'https://cdn.discordapp.com/emojis/123.png', name: 'wave' },
+  ]);
+});
+
+test('parseSegments: アニメーション絵文字は gif になる', () => {
+  assert.deepEqual(parseSegments('<a:dance:456>'), [
+    { type: 'emoji', url: 'https://cdn.discordapp.com/emojis/456.gif', name: 'dance' },
+  ]);
+});
+
+test('parseSegments: テキスト部分には URL 短縮が適用される', () => {
+  assert.deepEqual(parseSegments('https://example.com/x <:wave:123>'), [
+    { type: 'text', value: 'example.com/… ' },
+    { type: 'emoji', url: 'https://cdn.discordapp.com/emojis/123.png', name: 'wave' },
+  ]);
 });
