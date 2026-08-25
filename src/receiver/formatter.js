@@ -43,3 +43,13 @@ export function parseSegments(content) {
   pushText(content.slice(lastIndex));
   return segments;
 }
+
+export function normalize({ id, authorName, authorAvatarUrl, content, timestamp }) {
+  return {
+    id,
+    author: { name: authorName, avatarUrl: authorAvatarUrl ?? null },
+    text: content,
+    segments: parseSegments(content),
+    timestamp,
+  };
+}
