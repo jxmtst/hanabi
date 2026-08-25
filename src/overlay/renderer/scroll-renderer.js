@@ -12,10 +12,12 @@ const scrollRenderer = {
 
     function pickLane() {
       const now = performance.now();
+      const free = [];
       for (let i = 0; i < laneCount; i++) {
-        if (laneBusyUntil[i] <= now) return i;
+        if (laneBusyUntil[i] <= now) free.push(i);
       }
-      return -1;
+      if (free.length === 0) return -1;
+      return free[Math.floor(Math.random() * free.length)];
     }
 
     function buildElement(message) {
@@ -60,7 +62,13 @@ const scrollRenderer = {
         if (lane === -1) return;
 
         const el = buildElement(message);
-        el.style.top = `${lane * laneHeight}px`;
+        // レーン内で上下に軽く揺らして高さをばらけさせる（画面外に出ないようクランプ）
+        const jitter = (Math.random() - 0.5) * laneHeight * 0.6;
+        const top = Math.max(
+          0,
+          Math.min(window.innerHeight - laneHeight, lane * laneHeight + jitter),
+        );
+        el.style.top = `${top}px`;
         el.style.transform = `translateX(${window.innerWidth}px)`;
         stage.appendChild(el);
         active++;
