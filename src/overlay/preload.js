@@ -7,5 +7,6 @@ contextBridge.exposeInMainWorld('hanabi', {
   maxConcurrent: Number(process.env.HANABI_MAX ?? 40),
   showAuthor: process.env.HANABI_SHOW_AUTHOR !== 'false',
   showAvatar: process.env.HANABI_SHOW_AVATAR === 'true',
+  renderer: process.env.HANABI_RENDERER ?? 'scroll',
   onToggle: (cb) => ipcRenderer.on('danmaku-toggle', (_e, enabled) => cb(enabled)),
 });

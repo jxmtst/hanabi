@@ -1,10 +1,11 @@
 import { getRenderer } from './danmaku.js';
 import './scroll-renderer.js'; // 登録の副作用
+import './firework-renderer.js'; // 登録の副作用
 
 const cfg = window.hanabi;
 const stage = document.getElementById('stage');
 
-const renderer = getRenderer('scroll').create(stage, {
+const renderer = getRenderer(cfg.renderer).create(stage, {
   fontSize: cfg.fontSize,
   speed: cfg.speed,
   maxConcurrent: cfg.maxConcurrent,

@@ -24,3 +24,50 @@ html, body {
 .danmaku img.emoji { height: 1em; vertical-align: middle; }
 .danmaku img.avatar { height: 1em; border-radius: 50%; }
 .danmaku .author { opacity: 0.85; margin-right: 6px; }
+
+/* ===== firework レンダラ ===== */
+.firework {
+  position: absolute;
+  /* left/top はランダム打ち上げ点。基準を中心に置く */
+  transform: translate(-50%, -50%);
+}
+.firework .emoji { height: 1em; vertical-align: middle; }
+.firework .avatar { height: 1em; border-radius: 50%; }
+.firework .author { opacity: 0.85; margin-right: 6px; }
+
+.firework-text {
+  position: relative;
+  white-space: nowrap;
+  font-weight: 700;
+  text-shadow: 0 0 4px #000, 0 0 8px currentColor;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transform: translate(-50%, 0) scale(0.4);
+  opacity: 0;
+  animation: firework-burst 1.8s ease-out forwards;
+}
+
+@keyframes firework-burst {
+  0%   { transform: translate(-50%, 0) scale(0.4);   opacity: 0; }
+  15%  { transform: translate(-50%, 0) scale(1);     opacity: 1; }
+  70%  { transform: translate(-50%, -90px) scale(1.25); opacity: 1; }
+  100% { transform: translate(-50%, -160px) scale(1.5);  opacity: 0; }
+}
+
+.spark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 6px currentColor;
+  animation: spark-fly 1.4s ease-out forwards;
+}
+
+@keyframes spark-fly {
+  0%   { transform: translate(0, 0) scale(1);   opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
+}

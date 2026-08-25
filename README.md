@@ -28,6 +28,7 @@ npm run overlay    # 透明オーバーレイ表示
 |------|------|
 | `WS_PORT` | 受信部と表示部をつなぐポート |
 | `DISPLAY_INDEX` | 弾幕を出すディスプレイ番号（0=主モニタ, 1=2枚目 …） |
+| `RENDERER` | 表示方式（`scroll`=右→左スクロール / `firework`=任意の点で弾けて上に拡散） |
 | `SHOW_AUTHOR` | 送信者名の表示 |
 | `SHOW_AVATAR` | 送信者アイコンの表示 |
 | `FONT_SIZE` | 弾幕フォントサイズ(px) |
