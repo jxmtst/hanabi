@@ -16,7 +16,7 @@ export const config = {
   wsPort: num(process.env.WS_PORT, 8787),
   displayIndex: num(process.env.DISPLAY_INDEX, 0),
   renderer: process.env.RENDERER ?? 'scroll',
-  showAuthor: bool(process.env.SHOW_AUTHOR, true),
+  showAuthor: bool(process.env.SHOW_AUTHOR, false),
   showAvatar: bool(process.env.SHOW_AVATAR, false),
   avatarScale: num(process.env.AVATAR_SCALE, 1.3),
   emojiScale: num(process.env.EMOJI_SCALE, 1.5),
