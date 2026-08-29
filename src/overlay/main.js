@@ -12,6 +12,7 @@ process.env.HANABI_SPEED = String(config.danmakuSpeed);
 process.env.HANABI_MAX = String(config.maxConcurrent);
 process.env.HANABI_SHOW_AUTHOR = String(config.showAuthor);
 process.env.HANABI_SHOW_AVATAR = String(config.showAvatar);
+process.env.HANABI_AVATAR_SCALE = String(config.avatarScale);
 process.env.HANABI_RENDERER = String(config.renderer);
 
 let win;

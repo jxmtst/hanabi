@@ -11,6 +11,7 @@ const options = {
   maxConcurrent: cfg.maxConcurrent,
   showAuthor: cfg.showAuthor,
   showAvatar: cfg.showAvatar,
+  avatarScale: cfg.avatarScale,
 };
 
 let paused = false;
