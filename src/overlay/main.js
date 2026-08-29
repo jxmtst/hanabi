@@ -13,6 +13,7 @@ process.env.HANABI_MAX = String(config.maxConcurrent);
 process.env.HANABI_SHOW_AUTHOR = String(config.showAuthor);
 process.env.HANABI_SHOW_AVATAR = String(config.showAvatar);
 process.env.HANABI_AVATAR_SCALE = String(config.avatarScale);
+process.env.HANABI_EMOJI_SCALE = String(config.emojiScale);
 process.env.HANABI_RENDERER = String(config.renderer);
 
 let win;

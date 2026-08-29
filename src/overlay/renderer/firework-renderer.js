@@ -32,6 +32,7 @@ const fireworkRenderer = {
         if (seg.type === 'emoji') {
           const img = document.createElement('img');
           img.className = 'emoji';
+          img.style.height = `${options.emojiScale}em`;
           img.src = seg.url;
           img.alt = seg.name;
           el.appendChild(img);

@@ -12,6 +12,7 @@ const options = {
   showAuthor: cfg.showAuthor,
   showAvatar: cfg.showAvatar,
   avatarScale: cfg.avatarScale,
+  emojiScale: cfg.emojiScale,
 };
 
 let paused = false;

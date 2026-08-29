@@ -19,6 +19,7 @@ export const config = {
   showAuthor: bool(process.env.SHOW_AUTHOR, true),
   showAvatar: bool(process.env.SHOW_AVATAR, false),
   avatarScale: num(process.env.AVATAR_SCALE, 1.3),
+  emojiScale: num(process.env.EMOJI_SCALE, 1.5),
   fontSize: num(process.env.FONT_SIZE, 28),
   danmakuSpeed: num(process.env.DANMAKU_SPEED, 140),
   maxConcurrent: num(process.env.MAX_CONCURRENT, 40),
