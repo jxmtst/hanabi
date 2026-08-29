@@ -18,26 +18,39 @@ let win;
 let tray;
 let enabled = true;
 let currentRenderer = config.renderer;
+let currentDisplayIndex = 0;
 
 const RENDERERS = [
   { id: 'scroll', label: 'スクロール' },
   { id: 'firework', label: '花火' },
 ];
 
-function pickDisplay() {
+// config.displayIndex を有効範囲にクランプして初期表示ディスプレイを決める
+function resolveInitialDisplayIndex() {
   const displays = screen.getAllDisplays();
-  const target = displays[config.displayIndex];
-  if (!target) {
-    console.warn(
-      `[overlay] DISPLAY_INDEX=${config.displayIndex} は無効（接続数 ${displays.length}）。主ディスプレイを使用`,
-    );
-    return screen.getPrimaryDisplay();
+  if (config.displayIndex >= 0 && config.displayIndex < displays.length) {
+    return config.displayIndex;
   }
-  return target;
+  console.warn(
+    `[overlay] DISPLAY_INDEX=${config.displayIndex} は無効（接続数 ${displays.length}）。主ディスプレイを使用`,
+  );
+  const primaryId = screen.getPrimaryDisplay().id;
+  const idx = displays.findIndex((d) => d.id === primaryId);
+  return idx >= 0 ? idx : 0;
+}
+
+// 指定ディスプレイへウィンドウを移動しフルスクリーンに合わせる
+function moveToDisplay(index) {
+  const displays = screen.getAllDisplays();
+  const target = displays[index];
+  if (!win || !target) return;
+  currentDisplayIndex = index;
+  win.setBounds(target.bounds);
 }
 
 function createWindow() {
-  const { bounds } = pickDisplay();
+  currentDisplayIndex = resolveInitialDisplayIndex();
+  const { bounds } = screen.getAllDisplays()[currentDisplayIndex];
   win = new BrowserWindow({
     x: bounds.x,
     y: bounds.y,
@@ -72,6 +85,23 @@ function createTray() {
   rebuildMenu();
 }
 
+function buildDisplayMenu() {
+  const displays = screen.getAllDisplays();
+  const primaryId = screen.getPrimaryDisplay().id;
+  return displays.map((d, i) => {
+    const primary = d.id === primaryId ? ' (主)' : '';
+    return {
+      label: `${i + 1}: ${d.size.width}×${d.size.height}${primary}`,
+      type: 'radio',
+      checked: currentDisplayIndex === i,
+      click: () => {
+        moveToDisplay(i);
+        rebuildMenu();
+      },
+    };
+  });
+}
+
 function rebuildMenu() {
   const menu = Menu.buildFromTemplate([
     {
@@ -95,6 +125,10 @@ function rebuildMenu() {
         },
       })),
     },
+    {
+      label: '表示画面',
+      submenu: buildDisplayMenu(),
+    },
     { type: 'separator' },
     { label: '終了', click: () => app.quit() },
   ]);
@@ -104,6 +138,16 @@ function rebuildMenu() {
 app.whenReady().then(() => {
   createWindow();
   createTray();
+
+  // モニタの抜き差し・解像度変更でメニューの一覧を最新化する
+  const refresh = () => {
+    const displays = screen.getAllDisplays();
+    if (currentDisplayIndex >= displays.length) moveToDisplay(0);
+    rebuildMenu();
+  };
+  screen.on('display-added', refresh);
+  screen.on('display-removed', refresh);
+  screen.on('display-metrics-changed', refresh);
 });
 
 app.on('window-all-closed', () => app.quit());
