@@ -21,8 +21,17 @@ let tray;
 let enabled = true;
 let currentRenderer = config.renderer;
 let currentDisplayIndex = 0;
-let currentAvatarScale = config.avatarScale;
-let avatarShown = config.showAvatar;
+
+// 表示に関わる実行時設定（初期値は .env 由来。以降はメニューで変更）
+const state = {
+  avatarShown: config.showAvatar,
+  avatarScale: config.avatarScale,
+  emojiScale: config.emojiScale,
+  showAuthor: config.showAuthor,
+  fontSize: config.fontSize,
+  speed: config.danmakuSpeed,
+  maxConcurrent: config.maxConcurrent,
+};
 
 const RENDERERS = [
   { id: 'scroll', label: 'スクロール' },
@@ -35,6 +44,52 @@ const AVATAR_SCALES = [
   { value: 1.8, label: '大' },
   { value: 2.5, label: '特大' },
 ];
+
+const EMOJI_SCALES = [
+  { value: 1.0, label: '小' },
+  { value: 1.5, label: '中' },
+  { value: 2.2, label: '大' },
+  { value: 3.0, label: '特大' },
+];
+
+const FONT_SIZES = [
+  { value: 20, label: '小' },
+  { value: 28, label: '中' },
+  { value: 40, label: '大' },
+  { value: 56, label: '特大' },
+];
+
+const SPEEDS = [
+  { value: 80, label: '遅い' },
+  { value: 140, label: '標準' },
+  { value: 220, label: '速い' },
+  { value: 320, label: '爆速' },
+];
+
+const MAX_CONCURRENTS = [
+  { value: 20, label: '少なめ (20)' },
+  { value: 40, label: '標準 (40)' },
+  { value: 80, label: '多め (80)' },
+  { value: 9999, label: '無制限' },
+];
+
+// options patch を表示部へ送る
+function sendOptions(patch) {
+  win?.webContents.send('set-options', patch);
+}
+
+// 値リストからラジオ submenu を作る。選択時に onPick(value) を呼びメニューを再構築。
+function radioSubmenu(items, current, onPick) {
+  return items.map((it) => ({
+    label: it.label,
+    type: 'radio',
+    checked: current === it.value,
+    click: () => {
+      onPick(it.value);
+      rebuildMenu();
+    },
+  }));
+}
 
 // config.displayIndex を有効範囲にクランプして初期表示ディスプレイを決める
 function resolveInitialDisplayIndex() {
@@ -113,6 +168,32 @@ function buildDisplayMenu() {
   });
 }
 
+function buildAvatarMenu() {
+  return [
+    {
+      label: 'なし',
+      type: 'radio',
+      checked: !state.avatarShown,
+      click: () => {
+        state.avatarShown = false;
+        sendOptions({ showAvatar: false });
+        rebuildMenu();
+      },
+    },
+    ...AVATAR_SCALES.map((s) => ({
+      label: s.label,
+      type: 'radio',
+      checked: state.avatarShown && state.avatarScale === s.value,
+      click: () => {
+        state.avatarShown = true;
+        state.avatarScale = s.value;
+        sendOptions({ showAvatar: true, avatarScale: s.value });
+        rebuildMenu();
+      },
+    })),
+  ];
+}
+
 function rebuildMenu() {
   const menu = Menu.buildFromTemplate([
     {
@@ -123,6 +204,7 @@ function rebuildMenu() {
         rebuildMenu();
       },
     },
+    { type: 'separator' },
     {
       label: '表示方式',
       submenu: RENDERERS.map((r) => ({
@@ -136,36 +218,36 @@ function rebuildMenu() {
         },
       })),
     },
+    { label: '表示画面', submenu: buildDisplayMenu() },
+    { label: '文字サイズ', submenu: radioSubmenu(FONT_SIZES, state.fontSize, (v) => {
+      state.fontSize = v;
+      sendOptions({ fontSize: v });
+    }) },
+    { label: '速度', submenu: radioSubmenu(SPEEDS, state.speed, (v) => {
+      state.speed = v;
+      sendOptions({ speed: v });
+    }) },
+    { label: '最大表示数', submenu: radioSubmenu(MAX_CONCURRENTS, state.maxConcurrent, (v) => {
+      state.maxConcurrent = v;
+      sendOptions({ maxConcurrent: v });
+    }) },
+    { type: 'separator' },
     {
-      label: '表示画面',
-      submenu: buildDisplayMenu(),
-    },
-    {
-      label: 'アイコン',
-      submenu: [
-        {
-          label: 'なし',
-          type: 'radio',
-          checked: !avatarShown,
-          click: () => {
-            avatarShown = false;
-            win?.webContents.send('set-avatar', { show: false });
-            rebuildMenu();
-          },
+      label: '送信者名',
+      submenu: radioSubmenu(
+        [{ value: true, label: '表示' }, { value: false, label: '非表示' }],
+        state.showAuthor,
+        (v) => {
+          state.showAuthor = v;
+          sendOptions({ showAuthor: v });
         },
-        ...AVATAR_SCALES.map((s) => ({
-          label: s.label,
-          type: 'radio',
-          checked: avatarShown && currentAvatarScale === s.value,
-          click: () => {
-            avatarShown = true;
-            currentAvatarScale = s.value;
-            win?.webContents.send('set-avatar', { show: true, scale: s.value });
-            rebuildMenu();
-          },
-        })),
-      ],
+      ),
     },
+    { label: 'アイコン', submenu: buildAvatarMenu() },
+    { label: '絵文字サイズ', submenu: radioSubmenu(EMOJI_SCALES, state.emojiScale, (v) => {
+      state.emojiScale = v;
+      sendOptions({ emojiScale: v });
+    }) },
     { type: 'separator' },
     { label: '終了', click: () => app.quit() },
   ]);

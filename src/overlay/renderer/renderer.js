@@ -16,26 +16,31 @@ const options = {
 };
 
 let paused = false;
+let currentName = cfg.renderer;
 let renderer = null;
 
-// 実行時に表示方式を差し替える。既に表示中の弾幕は各自のタイマーで自然に消える。
-function setRenderer(name) {
-  renderer = getRenderer(name).create(stage, options);
+// 現在の設定でレンダラを（再）生成する。文字サイズ等の幾何情報も反映される。
+// 既に表示中の弾幕は各自のタイマーで自然に消える。
+function build() {
+  renderer = getRenderer(currentName).create(stage, options);
   renderer.setPaused(paused);
-  console.log(`[overlay] レンダラ切替: ${name}`);
 }
-setRenderer(cfg.renderer);
+build();
 
 cfg.onToggle((enabled) => {
   paused = !enabled;
   renderer.setPaused(paused);
 });
-cfg.onSetRenderer((name) => setRenderer(name));
-// options を書き換えると、現在・切替後どちらのレンダラも動的に参照する
-cfg.onSetAvatar(({ show, scale }) => {
-  options.showAvatar = show;
-  if (scale != null) options.avatarScale = scale;
-  console.log(`[overlay] アイコン: ${show ? `表示 x${options.avatarScale}` : 'なし'}`);
+cfg.onSetRenderer((name) => {
+  currentName = name;
+  build();
+  console.log(`[overlay] レンダラ切替: ${name}`);
+});
+// 表示に関わる設定変更はすべてここで受け、options を更新して作り直す。
+cfg.onSetOptions((patch) => {
+  Object.assign(options, patch);
+  build();
+  console.log('[overlay] 設定変更:', patch);
 });
 
 let backoff = 500;
