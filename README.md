@@ -13,12 +13,14 @@ Discord の特定チャンネルのメッセージを、ニコニコ動画風の
 
 ## 起動
 
-2つのターミナルで:
+receiver と overlay を同時に起動:
 
 ```bash
-npm run receiver   # Discord 受信 + WS ブロードキャスト
-npm run overlay    # 透明オーバーレイ表示
+make
 ```
+
+終了するときは `Ctrl-C` を押す。個別に起動する場合は `make receiver` または
+`make overlay` を使う。
 
 メニューバーの 🎆 から弾幕の停止/再開・終了ができる。
 
