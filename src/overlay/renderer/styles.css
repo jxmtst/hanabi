@@ -43,16 +43,18 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  transform: translate(-50%, 0) scale(0.4);
+  /* 水平センタリングは親 .firework の translate(-50%) が担うため、
+     ここでは拡大と上昇のみ（translateX(-50%) を重ねない） */
+  transform: translateY(0) scale(0.4);
   opacity: 0;
   animation: firework-burst 1.8s ease-out forwards;
 }
 
 @keyframes firework-burst {
-  0%   { transform: translate(-50%, 0) scale(0.4);   opacity: 0; }
-  15%  { transform: translate(-50%, 0) scale(1);     opacity: 1; }
-  70%  { transform: translate(-50%, -90px) scale(1.25); opacity: 1; }
-  100% { transform: translate(-50%, -160px) scale(1.5);  opacity: 0; }
+  0%   { transform: translateY(0) scale(0.4);   opacity: 0; }
+  15%  { transform: translateY(0) scale(1);     opacity: 1; }
+  70%  { transform: translateY(-90px) scale(1.25); opacity: 1; }
+  100% { transform: translateY(-160px) scale(1.5);  opacity: 0; }
 }
 
 .spark {
