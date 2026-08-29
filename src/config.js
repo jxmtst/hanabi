@@ -15,7 +15,7 @@ export const config = {
   channelId: process.env.CHANNEL_ID ?? '',
   wsPort: num(process.env.WS_PORT, 8787),
   displayIndex: num(process.env.DISPLAY_INDEX, 0),
-  renderer: process.env.RENDERER ?? 'scroll',
+  renderer: process.env.RENDERER ?? 'firework',
   showAuthor: bool(process.env.SHOW_AUTHOR, false),
   showAvatar: bool(process.env.SHOW_AVATAR, false),
   avatarScale: num(process.env.AVATAR_SCALE, 1.3),

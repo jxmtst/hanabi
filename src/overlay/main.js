@@ -34,8 +34,8 @@ const state = {
 };
 
 const RENDERERS = [
-  { id: 'scroll', label: 'スクロール' },
   { id: 'firework', label: '花火' },
+  { id: 'scroll', label: 'スクロール' },
 ];
 
 const AVATAR_SCALES = [

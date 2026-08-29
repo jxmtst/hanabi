@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld('hanabi', {
   showAvatar: process.env.HANABI_SHOW_AVATAR === 'true',
   avatarScale: Number(process.env.HANABI_AVATAR_SCALE ?? 1.3),
   emojiScale: Number(process.env.HANABI_EMOJI_SCALE ?? 1.5),
-  renderer: process.env.HANABI_RENDERER ?? 'scroll',
+  renderer: process.env.HANABI_RENDERER ?? 'firework',
   onToggle: (cb) => ipcRenderer.on('danmaku-toggle', (_e, enabled) => cb(enabled)),
   onSetRenderer: (cb) => ipcRenderer.on('set-renderer', (_e, name) => cb(name)),
   onSetOptions: (cb) => ipcRenderer.on('set-options', (_e, patch) => cb(patch)),
