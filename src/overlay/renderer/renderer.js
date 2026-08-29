@@ -5,15 +5,30 @@ import './firework-renderer.js'; // 登録の副作用
 const cfg = window.hanabi;
 const stage = document.getElementById('stage');
 
-const renderer = getRenderer(cfg.renderer).create(stage, {
+const options = {
   fontSize: cfg.fontSize,
   speed: cfg.speed,
   maxConcurrent: cfg.maxConcurrent,
   showAuthor: cfg.showAuthor,
   showAvatar: cfg.showAvatar,
-});
+};
 
-cfg.onToggle((enabled) => renderer.setPaused(!enabled));
+let paused = false;
+let renderer = null;
+
+// 実行時に表示方式を差し替える。既に表示中の弾幕は各自のタイマーで自然に消える。
+function setRenderer(name) {
+  renderer = getRenderer(name).create(stage, options);
+  renderer.setPaused(paused);
+  console.log(`[overlay] レンダラ切替: ${name}`);
+}
+setRenderer(cfg.renderer);
+
+cfg.onToggle((enabled) => {
+  paused = !enabled;
+  renderer.setPaused(paused);
+});
+cfg.onSetRenderer((name) => setRenderer(name));
 
 let backoff = 500;
 function connect() {

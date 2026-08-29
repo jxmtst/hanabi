@@ -17,6 +17,12 @@ process.env.HANABI_RENDERER = String(config.renderer);
 let win;
 let tray;
 let enabled = true;
+let currentRenderer = config.renderer;
+
+const RENDERERS = [
+  { id: 'scroll', label: 'スクロール' },
+  { id: 'firework', label: '花火' },
+];
 
 function pickDisplay() {
   const displays = screen.getAllDisplays();
@@ -75,6 +81,19 @@ function rebuildMenu() {
         win?.webContents.send('danmaku-toggle', enabled);
         rebuildMenu();
       },
+    },
+    {
+      label: '表示方式',
+      submenu: RENDERERS.map((r) => ({
+        label: r.label,
+        type: 'radio',
+        checked: currentRenderer === r.id,
+        click: () => {
+          currentRenderer = r.id;
+          win?.webContents.send('set-renderer', r.id);
+          rebuildMenu();
+        },
+      })),
     },
     { type: 'separator' },
     { label: '終了', click: () => app.quit() },
