@@ -11,5 +11,5 @@ contextBridge.exposeInMainWorld('hanabi', {
   renderer: process.env.HANABI_RENDERER ?? 'scroll',
   onToggle: (cb) => ipcRenderer.on('danmaku-toggle', (_e, enabled) => cb(enabled)),
   onSetRenderer: (cb) => ipcRenderer.on('set-renderer', (_e, name) => cb(name)),
-  onSetAvatarScale: (cb) => ipcRenderer.on('set-avatar-scale', (_e, scale) => cb(scale)),
+  onSetAvatar: (cb) => ipcRenderer.on('set-avatar', (_e, payload) => cb(payload)),
 });

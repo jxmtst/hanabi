@@ -21,6 +21,7 @@ let enabled = true;
 let currentRenderer = config.renderer;
 let currentDisplayIndex = 0;
 let currentAvatarScale = config.avatarScale;
+let avatarShown = config.showAvatar;
 
 const RENDERERS = [
   { id: 'scroll', label: 'スクロール' },
@@ -139,17 +140,30 @@ function rebuildMenu() {
       submenu: buildDisplayMenu(),
     },
     {
-      label: 'アイコンサイズ',
-      submenu: AVATAR_SCALES.map((s) => ({
-        label: s.label,
-        type: 'radio',
-        checked: currentAvatarScale === s.value,
-        click: () => {
-          currentAvatarScale = s.value;
-          win?.webContents.send('set-avatar-scale', s.value);
-          rebuildMenu();
+      label: 'アイコン',
+      submenu: [
+        {
+          label: 'なし',
+          type: 'radio',
+          checked: !avatarShown,
+          click: () => {
+            avatarShown = false;
+            win?.webContents.send('set-avatar', { show: false });
+            rebuildMenu();
+          },
         },
-      })),
+        ...AVATAR_SCALES.map((s) => ({
+          label: s.label,
+          type: 'radio',
+          checked: avatarShown && currentAvatarScale === s.value,
+          click: () => {
+            avatarShown = true;
+            currentAvatarScale = s.value;
+            win?.webContents.send('set-avatar', { show: true, scale: s.value });
+            rebuildMenu();
+          },
+        })),
+      ],
     },
     { type: 'separator' },
     { label: '終了', click: () => app.quit() },

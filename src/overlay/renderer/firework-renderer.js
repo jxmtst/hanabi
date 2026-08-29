@@ -6,7 +6,7 @@ const SPARK_COUNT = 12;
 const fireworkRenderer = {
   name: 'firework',
   create(stage, options) {
-    const { fontSize, maxConcurrent, showAuthor, showAvatar } = options;
+    const { fontSize, maxConcurrent, showAuthor } = options;
     let active = 0;
     let paused = false;
 
@@ -15,7 +15,7 @@ const fireworkRenderer = {
       el.className = 'firework-text';
       el.style.fontSize = `${fontSize}px`;
 
-      if (showAvatar && message.author.avatarUrl) {
+      if (options.showAvatar && message.author.avatarUrl) {
         const img = document.createElement('img');
         img.className = 'avatar';
         img.style.height = `${options.avatarScale}em`;

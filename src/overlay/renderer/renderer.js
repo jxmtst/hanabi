@@ -31,9 +31,10 @@ cfg.onToggle((enabled) => {
 });
 cfg.onSetRenderer((name) => setRenderer(name));
 // options を書き換えると、現在・切替後どちらのレンダラも動的に参照する
-cfg.onSetAvatarScale((scale) => {
-  options.avatarScale = scale;
-  console.log(`[overlay] アイコン倍率: ${scale}`);
+cfg.onSetAvatar(({ show, scale }) => {
+  options.showAvatar = show;
+  if (scale != null) options.avatarScale = scale;
+  console.log(`[overlay] アイコン: ${show ? `表示 x${options.avatarScale}` : 'なし'}`);
 });
 
 let backoff = 500;
