@@ -35,7 +35,7 @@ make
 | `RENDERER` | 表示方式（`scroll`=右→左スクロール / `firework`=任意の点で弾けて上に拡散） |
 | `SHOW_AUTHOR` | 送信者名の表示 |
 | `SHOW_AVATAR` | 送信者アイコンの表示 |
-| `AVATAR_SCALE` | アイコンの大きさ（文字高に対する倍率。既定 1.6） |
+| `AVATAR_SCALE` | アイコンの大きさ（文字高に対する倍率。既定 1.3） |
 | `FONT_SIZE` | 弾幕フォントサイズ(px) |
 | `DANMAKU_SPEED` | スクロール速度(px/秒) |
 | `MAX_CONCURRENT` | 同時表示の最大数（超過分はドロップ） |
