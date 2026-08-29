@@ -62,8 +62,8 @@ const FONT_SIZES = [
 const SPEEDS = [
   { value: 320, label: '遅い' },
   { value: 500, label: '標準' },
-  { value: 750, label: '速い' },
-  { value: 1100, label: '爆速' },
+  { value: 680, label: '速い' },
+  { value: 850, label: '爆速' },
 ];
 
 const MAX_CONCURRENTS = [
