@@ -20,10 +20,18 @@ let tray;
 let enabled = true;
 let currentRenderer = config.renderer;
 let currentDisplayIndex = 0;
+let currentAvatarScale = config.avatarScale;
 
 const RENDERERS = [
   { id: 'scroll', label: 'スクロール' },
   { id: 'firework', label: '花火' },
+];
+
+const AVATAR_SCALES = [
+  { value: 1.3, label: '小' },
+  { value: 1.6, label: '中' },
+  { value: 2.0, label: '大' },
+  { value: 2.5, label: '特大' },
 ];
 
 // config.displayIndex を有効範囲にクランプして初期表示ディスプレイを決める
@@ -129,6 +137,19 @@ function rebuildMenu() {
     {
       label: '表示画面',
       submenu: buildDisplayMenu(),
+    },
+    {
+      label: 'アイコンサイズ',
+      submenu: AVATAR_SCALES.map((s) => ({
+        label: s.label,
+        type: 'radio',
+        checked: currentAvatarScale === s.value,
+        click: () => {
+          currentAvatarScale = s.value;
+          win?.webContents.send('set-avatar-scale', s.value);
+          rebuildMenu();
+        },
+      })),
     },
     { type: 'separator' },
     { label: '終了', click: () => app.quit() },
