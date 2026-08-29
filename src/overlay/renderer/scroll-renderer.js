@@ -64,18 +64,18 @@ const scrollRenderer = {
         if (lane === -1) return;
 
         const el = buildElement(message);
-        // レーン内で上下に軽く揺らして高さをばらけさせる（画面外に出ないようクランプ）
-        const jitter = (Math.random() - 0.5) * laneHeight * 0.6;
-        const top = Math.max(
-          0,
-          Math.min(window.innerHeight - laneHeight, lane * laneHeight + jitter),
-        );
-        el.style.top = `${top}px`;
         el.style.transform = `translateX(${window.innerWidth}px)`;
         stage.appendChild(el);
         active++;
 
         const width = el.offsetWidth; // レイアウト確定
+        const height = el.offsetHeight; // アイコン/絵文字で laneHeight を超えうる
+        // レーン内で上下に軽く揺らしつつ、実測の高さで下端が切れないようクランプ
+        const jitter = (Math.random() - 0.5) * laneHeight * 0.6;
+        const maxTop = Math.max(0, window.innerHeight - height);
+        const top = Math.max(0, Math.min(maxTop, lane * laneHeight + jitter));
+        el.style.top = `${top}px`;
+
         const distance = window.innerWidth + width;
         const durationMs = (distance / speed) * 1000;
         // このレーンが再利用可能になるまでの時間（要素が完全に画面外に出る猶予）

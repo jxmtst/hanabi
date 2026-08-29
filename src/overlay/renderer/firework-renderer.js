@@ -67,9 +67,9 @@ const fireworkRenderer = {
         if (paused) return;
         if (active >= maxConcurrent) return; // 過多時はドロップ
 
-        // ランダムな打ち上げ点（縦は下寄り 40〜85%、上に広がる余地を残す）
+        // ランダムな打ち上げ点（縦は下寄り 50〜80%、上に広がる余地を残す）
         const x = Math.random() * window.innerWidth;
-        const y = window.innerHeight * (0.4 + Math.random() * 0.45);
+        const y = window.innerHeight * (0.5 + Math.random() * 0.3);
         const hue = Math.floor(Math.random() * 360);
         const color = `hsl(${hue}, 90%, 65%)`;
 
@@ -85,6 +85,18 @@ const fireworkRenderer = {
 
         stage.appendChild(burst);
         active++;
+
+        // テキストは中央寄せ(translateX -50%)＋最大1.5倍に拡大するため、
+        // 端に寄ると左右がはみ出す。実測幅で打ち上げ点 x をクランプする。
+        const margin = 8;
+        const half = (text.offsetWidth * 1.5) / 2;
+        let cx = x;
+        if (half * 2 >= window.innerWidth) {
+          cx = window.innerWidth / 2; // 画面より広い場合は中央
+        } else {
+          cx = Math.min(window.innerWidth - half - margin, Math.max(half + margin, x));
+        }
+        burst.style.left = `${cx}px`;
 
         const cleanup = () => {
           burst.remove();
