@@ -13,12 +13,14 @@ Discord の特定チャンネルのメッセージを、ニコニコ動画風の
 
 ## 起動
 
-2つのターミナルで:
+receiver と overlay を同時に起動:
 
 ```bash
-npm run receiver   # Discord 受信 + WS ブロードキャスト
-npm run overlay    # 透明オーバーレイ表示
+make
 ```
+
+終了するときは `Ctrl-C` を押す。個別に起動する場合は `make receiver` または
+`make overlay` を使う。
 
 メニューバーの 🎆 から弾幕の停止/再開・終了ができる。
 
@@ -28,6 +30,7 @@ npm run overlay    # 透明オーバーレイ表示
 |------|------|
 | `WS_PORT` | 受信部と表示部をつなぐポート |
 | `DISPLAY_INDEX` | 弾幕を出すディスプレイ番号（0=主モニタ, 1=2枚目 …） |
+| `RENDERER` | 表示方式（`scroll`=右→左スクロール / `firework`=任意の点で弾けて上に拡散） |
 | `SHOW_AUTHOR` | 送信者名の表示 |
 | `SHOW_AVATAR` | 送信者アイコンの表示 |
 | `FONT_SIZE` | 弾幕フォントサイズ(px) |

@@ -15,6 +15,7 @@ export const config = {
   channelId: process.env.CHANNEL_ID ?? '',
   wsPort: num(process.env.WS_PORT, 8787),
   displayIndex: num(process.env.DISPLAY_INDEX, 0),
+  renderer: process.env.RENDERER ?? 'scroll',
   showAuthor: bool(process.env.SHOW_AUTHOR, true),
   showAvatar: bool(process.env.SHOW_AVATAR, false),
   fontSize: num(process.env.FONT_SIZE, 28),
