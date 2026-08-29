@@ -21,7 +21,7 @@ export const config = {
   avatarScale: num(process.env.AVATAR_SCALE, 1.3),
   emojiScale: num(process.env.EMOJI_SCALE, 1.5),
   fontSize: num(process.env.FONT_SIZE, 28),
-  danmakuSpeed: num(process.env.DANMAKU_SPEED, 140),
+  danmakuSpeed: num(process.env.DANMAKU_SPEED, 500),
   maxConcurrent: num(process.env.MAX_CONCURRENT, 40),
 };
 
