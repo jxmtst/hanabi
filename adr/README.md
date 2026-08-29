@@ -19,3 +19,4 @@ ADR（Architecture Decision Record）は、「なぜその設計を選んだか�
 |-----|----------|--------|
 | [0001](0001-use-electron.md) | オーバーレイの実装基盤に Electron を採用する | Accepted |
 | [0002](0002-two-layer-architecture.md) | 受信部と表示部を分離した二層アーキテクチャを採用する | Accepted |
+| [0003](0003-runtime-settings-via-menu-bar.md) | 表示設定はメニューバーから実行時に変更し set-options IPC に一本化する | Accepted |

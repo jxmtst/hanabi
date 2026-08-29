@@ -3,7 +3,7 @@ import { registerRenderer } from './danmaku.js';
 const scrollRenderer = {
   name: 'scroll',
   create(stage, options) {
-    const { fontSize, speed, maxConcurrent, showAuthor, showAvatar } = options;
+    const { fontSize, speed, maxConcurrent, showAuthor } = options;
     const laneHeight = Math.round(fontSize * 1.4);
     const laneCount = Math.max(1, Math.floor(window.innerHeight / laneHeight));
     const laneBusyUntil = new Array(laneCount).fill(0);
@@ -25,9 +25,10 @@ const scrollRenderer = {
       el.className = 'danmaku';
       el.style.fontSize = `${fontSize}px`;
 
-      if (showAvatar && message.author.avatarUrl) {
+      if (options.showAvatar && message.author.avatarUrl) {
         const img = document.createElement('img');
         img.className = 'avatar';
+        img.style.height = `${options.avatarScale}em`;
         img.src = message.author.avatarUrl;
         el.appendChild(img);
       }
@@ -41,6 +42,7 @@ const scrollRenderer = {
         if (seg.type === 'emoji') {
           const img = document.createElement('img');
           img.className = 'emoji';
+          img.style.height = `${options.emojiScale}em`;
           img.src = seg.url;
           img.alt = seg.name;
           el.appendChild(img);
