@@ -29,7 +29,7 @@ const RENDERERS = [
 ];
 
 const AVATAR_SCALES = [
-  { value: 1.3, label: '小' },
+  { value: 1.0, label: '小' },
   { value: 1.6, label: '中' },
   { value: 2.0, label: '大' },
   { value: 2.5, label: '特大' },
